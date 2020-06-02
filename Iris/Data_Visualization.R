@@ -1,5 +1,3 @@
-setwd("/Users/manasavegesna/Documents/BetterMe/DataScienceR")
-
 #Loading the Iris Dataset
 
 library(datasets)
@@ -7,12 +5,12 @@ data(iris)
 iris <- datasets::iris
 View(iris)
 
-#using RCurl 
+#using RCurl
 #library(RCurl)
 # iris <- read.csv(text = getURL("someURL"))
 
 ########################
-#Summary Statistics 
+#Summary Statistics
 ########################
 
 head(iris)
@@ -25,7 +23,7 @@ summary(iris$Sepal.Width)
 sum(is.na(iris)) #summation of missing data
 
 #getting a larger set of statistics for the dataset
-library(skimr) 
+library(skimr)
 skim(iris)
 
 #Panel plots
