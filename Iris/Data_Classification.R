@@ -1,5 +1,3 @@
-setwd('/Users/manasavegesna/Documents/BetterMe/DataScienceR')
-
 # Importing libraries
 library(datasets) # Contains the Iris data set
 library(caret) # Package for machine learning algorithms / CARET stands for Classification And REgression Training
