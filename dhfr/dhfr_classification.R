@@ -3,10 +3,10 @@ library(datasets) # Contains the Iris data set
 library(caret) # Package for machine learning algorithms / CARET stands for Classification And REgression Training
 
 # Importing the Iris data set
-data(iris)
+data("dhfr")
 
 # Checking for missing data
-sum(is.na(iris))
+sum(is.na(dhfr))
 
 # To achieve reproducible model; setting the random seed number
 set.seed(100)
@@ -16,25 +16,16 @@ set.seed(100)
 # training set (80%) and testing set(20%)
 
 # Performs stratified random split of the data set
-TrainingIndex <- createDataPartition(iris$Species, p=0.8, list = FALSE)
-TrainingSet <- iris[TrainingIndex,] # Training Set
-TestingSet <- iris[-TrainingIndex,] # Test Set
+TrainingIndex <- createDataPartition(dhfr$Y, p=0.8, list = FALSE)
+TrainingSet <- dhfr[TrainingIndex,] # Training Set
+TestingSet <- dhfr[-TrainingIndex,] # Test Set
 
-# Compare scatter plot of the 80 and 20 data subsets
-# Scatterplot for Training dataset
-plot(TrainingSet$Sepal.Width, TrainingSet$Sepal.Length, col='blue', xlab= 'Sepal width', ylab = 'Sepal Length')
-plot(TrainingSet$Petal.Width, TrainingSet$Petal.Length, col='blue', xlab='Petal Width', ylab='Sepal Length')
-#Scatterplot for Testing dataset
-plot(TestingSet$Sepal.Width, TestingSet$Sepal.Length, col='red', xlab= 'Sepal width', ylab = 'Sepal Length')
-plot(TestingSet$Petal.Width, TestingSet$Petal.Length, col='red', xlab='Petal Width', ylab='Sepal Length')
-
-###############################
 # Building a classification model using a Support Vector Machine Model
 #SVM model (polynomial kernel)
 
 library(e1071)
 # Build Training model
-Model <- train(Species ~ ., data = TrainingSet,
+Model <- train(Y ~ ., data = TrainingSet,
                method = "svmPoly",
                na.action = na.omit,
                preProcess=c("scale","center"),
@@ -43,7 +34,7 @@ Model <- train(Species ~ ., data = TrainingSet,
 )
 
 # Build CV (Cross Validation) model
-Model.cv <- train(Species ~ ., data = TrainingSet,
+Model.cv <- train(Y ~ ., data = TrainingSet,
                   method = "svmPoly",
                   na.action = na.omit,
                   preProcess=c("scale","center"),
@@ -58,9 +49,9 @@ Model.testing <-predict(Model, TestingSet) # Apply model to make prediction on T
 Model.cv <-predict(Model.cv, TrainingSet) # Perform cross-validation
 
 # Evaluating Model Prediction Performance (Displays confusion matrix and statistics)
-Model.training.confusion <-confusionMatrix(Model.training, TrainingSet$Species)
-Model.testing.confusion <-confusionMatrix(Model.testing, TestingSet$Species)
-Model.cv.confusion <-confusionMatrix(Model.cv, TrainingSet$Species)
+Model.training.confusion <-confusionMatrix(Model.training, TrainingSet$Y)
+Model.testing.confusion <-confusionMatrix(Model.testing, TestingSet$Y)
+Model.cv.confusion <-confusionMatrix(Model.cv, TrainingSet$Y)
 
 #Looking at the model performance metrics
 print(Model.training.confusion)
@@ -70,4 +61,4 @@ print(Model.cv.confusion)
 # Feature importance (tells us which feature was most important for the class prediction)
 Importance <- varImp(Model)
 plot(Importance)
-plot(Importance, col = "red")
+plot(Importance, top=25) #Visualizing top 25 factors which influence the prediction
